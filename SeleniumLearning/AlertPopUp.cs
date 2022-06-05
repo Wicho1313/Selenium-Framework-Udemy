@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +44,30 @@ namespace SeleniumLearning
             StringAssert.Contains(name, alertText);
 
 
+        }
+        [Test]
+        public void SuggestiveDropdowns()
+        {
+            String selectorCssSuggestions = ".ui-menu-item div";
+            driver.FindElement(By.Id("autocomplete")).SendKeys("ind");
+
+            IWebElement suggestions = (IWebElement)driver.FindElement(By.CssSelector(selectorCssSuggestions));
+            
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(8));
+            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(suggestions));
+
+            // Thread.Sleep(3000);
+            IList <IWebElement> options = driver.FindElements(By.CssSelector(selectorCssSuggestions));
+
+            foreach(IWebElement option in options)
+            {
+                if (option.Text.Equals("India"))
+                {
+                    option.Click();
+                }
+                
+            }
+            TestContext.Progress.WriteLine(driver.FindElement(By.Id("autocomplete")).GetAttribute("value"));
         }
         [TearDown]
         public void CloseBrowser()
