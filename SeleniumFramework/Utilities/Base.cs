@@ -12,7 +12,10 @@ namespace SeleniumFramework.Utilities
 {
     internal class Base
     {
-        public IWebDriver driver;
+        // before IWebDriver driver;
+        // now adding thread to run test in parallel
+        // we need to add 'driver.Value' in order to get the thread
+        public ThreadLocal <IWebDriver> driver = new ThreadLocal<IWebDriver>();
 
         [SetUp]
         public void Setup()
@@ -20,27 +23,27 @@ namespace SeleniumFramework.Utilities
             TestContext.Progress.WriteLine("Initializing SetUp");
 
             new WebDriverManager.DriverManager().SetUpDriver(new ChromeConfig());
-            driver = new ChromeDriver();
+            driver.Value = new ChromeDriver();
             // Implicit wait can be declared globaly
 
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
+            driver.Value.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
 
 
-            driver.Manage().Window.Maximize();
+            driver.Value.Manage().Window.Maximize();
 
-            driver.Url = "https://rahulshettyacademy.com/loginpagePractise/";
+            driver.Value.Url = "https://rahulshettyacademy.com/loginpagePractise/";
         }
 
         public IWebDriver getDriver()
         {
-            return driver;
+            return driver.Value;
         }
 
         [TearDown]
         public void CloseBrowser()
         {
             TestContext.Progress.WriteLine("Finishing");
-            driver.Quit();
+            driver.Value.Quit();
         }
     }
 }

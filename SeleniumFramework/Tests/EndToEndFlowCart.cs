@@ -10,18 +10,21 @@ using System.Threading.Tasks;
 
 namespace SeleniumFramework.Tests
 {
+    [Parallelizable(ParallelScope.Self)]
     internal class EndToEndFlowCart : Base
     {
         
-
         [Test]
-        public void EndToEndFlow_AddingProductsToCart()
+        [Parallelizable(ParallelScope.All)]
+        [TestCase("rahulshettyacademy", "learning", "iphone X", "Blackberry")]// adding TDD - Test Data Driven
+        [TestCase("hulshecademy", "learn", "iphone X", "Blackberry")]
+        public void EndToEndFlow_AddingProductsToCart(String username, string pass, String expectedProd1, String expecctedProd2)
         {
-            String[] expectedProducts = {"iphone X", "Blackberry" };
+            String[] expectedProducts = {expectedProd1, expecctedProd2};
             String[] actualProducts = new String[2];
             LoginPage loginPage = new LoginPage(getDriver());
 
-            ProductsPage productsPage = loginPage.validLogin("rahulshettyacademy", "learning");
+            ProductsPage productsPage = loginPage.validLogin(username, pass);
             productsPage.waitForPageDisplay();
 
             IList<IWebElement> products = productsPage.getCards();
