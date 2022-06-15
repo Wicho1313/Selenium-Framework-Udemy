@@ -10,11 +10,12 @@ using System.Threading.Tasks;
 
 namespace SeleniumFramework.Tests
 {
-    [Parallelizable(ParallelScope.Self)]
+    [Parallelizable(ParallelScope.Self)] // run test of the class in parallel
     internal class EndToEndFlowCart : Base
     {
-        
-        [Test]
+        // To run in cmd - 'dotnet test pathto.csproj' (all test)
+        // 'dotnet test pathto.csproj' --filter TestCategory=Smoke
+        [Test, Category("Smoke")] // adding category to test
         [Parallelizable(ParallelScope.All)]
         [TestCase("rahulshettyacademy", "learning", "iphone X", "Blackberry")]// adding TDD - Test Data Driven
         [TestCase("hulshecademy", "learn", "iphone X", "Blackberry")]
